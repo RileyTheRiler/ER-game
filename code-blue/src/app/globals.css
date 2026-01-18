@@ -1,0 +1,246 @@
+@import "tailwindcss";
+
+/* CODE BLUE - Medical Theme */
+:root {
+  /* Core colors - Deep, dark, sterile vs bloody */
+  --background: #050508;
+  --foreground: #e4e4e7;
+
+  /* Medical palette */
+  --primary: #0891b2;
+  /* Hospital teal */
+  --primary-hover: #0e7490;
+  --primary-active: #155e75;
+  --primary-light: #22d3ee;
+
+  --danger: #dc2626;
+  /* Emergency red */
+  --danger-hover: #b91c1c;
+  --danger-light: #ef4444;
+
+  --warning: #f59e0b;
+  /* Caution amber */
+  --warning-hover: #d97706;
+  --warning-light: #fbbf24;
+
+  --success: #16a34a;
+  /* Stable green */
+  --success-hover: #15803d;
+  --success-light: #4ade80;
+
+  /* Grays - Cool grays for technical feel */
+  --gray-950: #09090b;
+  --gray-900: #18181b;
+  --gray-800: #27272a;
+  --gray-700: #3f3f46;
+  --gray-600: #52525b;
+  --gray-500: #71717a;
+  --gray-400: #a1a1aa;
+
+  /* UI Surfaces */
+  --card-bg: rgba(24, 24, 27, 0.6);
+  --card-border: #3f3f46;
+  --muted: #a1a1aa;
+
+  /* Effects */
+  --glow-primary: rgba(34, 211, 238, 0.2);
+  --glow-danger: rgba(239, 68, 68, 0.2);
+  --glow-success: rgba(74, 222, 128, 0.2);
+
+  /* Monitor colors */
+  --ecg-green: #22c55e;
+  /* Classic ECG Green */
+  --spo2-cyan: #06b6d4;
+  /* Pleth Blue/Cyan */
+  --bp-red: #ef4444;
+  /* Art Line Red */
+  --resp-yellow: #eab308;
+  /* Resp Yellow */
+  --co2-purple: #a855f7;
+  /* EtCO2 Purple */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-light: var(--primary-light);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+
+  --color-gray-950: var(--gray-950);
+  --color-gray-900: var(--gray-900);
+  --color-gray-800: var(--gray-800);
+  --color-gray-700: var(--gray-700);
+
+  --color-ecg: var(--ecg-green);
+  --color-spo2: var(--spo2-cyan);
+  --color-bp: var(--bp-red);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --animate-pulse-fast: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-flicker: flicker 4s infinite;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  min-height: 100vh;
+  overflow-x: hidden;
+  /* Subtle vignette */
+  background-image: radial-gradient(circle at center, transparent 0%, #000 120%);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  letter-spacing: -0.025em;
+}
+
+/* Typography Utilities */
+.font-medical-mono {
+  font-family: var(--font-mono);
+  letter-spacing: -0.05em;
+}
+
+.text-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gray-500);
+  font-weight: 600;
+}
+
+/* Skill voice glow effects */
+.skill-voice {
+  font-style: italic;
+  font-family: var(--font-mono);
+  /* Internal monologue feels different */
+}
+
+.skill-clinical {
+  color: var(--primary-light);
+  text-shadow: 0 0 10px var(--glow-primary);
+}
+
+.skill-social {
+  color: var(--success-light);
+  text-shadow: 0 0 10px var(--glow-success);
+}
+
+.skill-psychological {
+  color: var(--warning-light);
+}
+
+/* Animation Keyframes */
+@keyframes pulse-urgent {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 0.97;
+  }
+
+  5% {
+    opacity: 0.9;
+  }
+
+  10% {
+    opacity: 0.97;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.98;
+  }
+
+  55% {
+    opacity: 0.95;
+  }
+
+  60% {
+    opacity: 0.98;
+  }
+
+  100% {
+    opacity: 0.97;
+  }
+}
+
+/* Utility Classes */
+.pulse-urgent {
+  animation: pulse-urgent 1.5s ease-in-out infinite;
+}
+
+.scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.1) 51%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* CRT Screen Effect Overlay */
+.crt-overlay::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(18, 16, 16, 0.1);
+  opacity: 0;
+  z-index: 2;
+  pointer-events: none;
+  animation: flicker 0.15s infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-700);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-600);
+}

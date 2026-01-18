@@ -1,0 +1,139 @@
+/* CRT Effects and Theme Variables */
+:root {
+    --crt-green: #33ff00;
+    --crt-amber: #ffb000;
+    --crt-blue: #0088ff;
+    --crt-red: #ff3300;
+    --bg-color: #0d1117;
+    --terminal-bg: #050a0f;
+
+    --scanline-color: rgba(18, 16, 16, 0.5);
+    --glass-reflection: rgba(255, 255, 255, 0.02);
+}
+
+@keyframes scanline {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(100vh);
+    }
+}
+
+@keyframes flicker {
+    0% {
+        opacity: 0.97;
+    }
+
+    5% {
+        opacity: 0.95;
+    }
+
+    10% {
+        opacity: 0.9;
+    }
+
+    15% {
+        opacity: 0.95;
+    }
+
+    20% {
+        opacity: 0.98;
+    }
+
+    50% {
+        opacity: 0.95;
+    }
+
+    80% {
+        opacity: 0.9;
+    }
+
+    100% {
+        opacity: 0.97;
+    }
+}
+
+@keyframes textShadow {
+    0% {
+        text-shadow: 0.4389924193300864px 0 1px rgba(0, 30, 255, 0.5), -0.4389924193300864px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+    }
+
+    50% {
+        text-shadow: 2.7928974010788217px 0 1px rgba(0, 30, 255, 0.5), -2.7928974010788217px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+    }
+
+    100% {
+        text-shadow: 0.4389924193300864px 0 1px rgba(0, 30, 255, 0.5), -0.4389924193300864px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+    }
+}
+
+.crt-container {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--terminal-bg);
+    color: #cdd6f4;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Scanlines Overlay */
+.crt-overlay::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(to bottom,
+            rgba(18, 16, 16, 0) 50%,
+            rgba(0, 0, 0, 0.25) 50%);
+    background-size: 100% 4px;
+    z-index: 50;
+    pointer-events: none;
+}
+
+/* Moving Scanline */
+.crt-overlay::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(18, 16, 16, 0.1);
+    opacity: 0;
+    z-index: 50;
+    pointer-events: none;
+    animation: flicker 0.15s infinite;
+}
+
+.crt-text-glow {
+    text-shadow: 0 0 5px currentColor;
+}
+
+.crt-border {
+    border: 1px solid #334155;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+}
+
+/* Specific component styles */
+.vital-hr {
+    color: var(--crt-green);
+}
+
+.vital-bp {
+    color: var(--crt-blue);
+}
+
+.vital-o2 {
+    color: var(--crt-amber);
+}
+
+.vital-crit {
+    color: var(--crt-red);
+    animation: flicker 0.2s infinite;
+}
