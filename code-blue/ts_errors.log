@@ -1,0 +1,17 @@
+src/components/game/CPCMode.tsx(255,29): error TS2322: Type '{ value: number; max: number; variant: "time" | "stress"; size: "lg"; showValue: boolean; }' is not assignable to type 'IntrinsicAttributes & ProgressBarProps'.
+  Property 'showValue' does not exist on type 'IntrinsicAttributes & ProgressBarProps'.
+src/components/ui/index.ts(16,23): error TS2614: Module '"./ProgressBar"' has no exported member 'ShiftProgress'. Did you mean to use 'import ShiftProgress from "./ProgressBar"' instead?
+src/data/cases/PC001.ts(211,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC002.ts(66,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC003.ts(64,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC004.ts(64,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC005.ts(64,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC091.ts(122,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC091.ts(132,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC092.ts(94,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC092.ts(101,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC092.ts(108,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC093.ts(115,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC094.ts(96,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC095.ts(125,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.
+src/data/cases/PC096.ts(83,13): error TS2353: Object literal may only specify known properties, and 'effects' does not exist in type 'NarrativeNode'.

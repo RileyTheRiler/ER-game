@@ -93,7 +93,7 @@ const PC094: PatientCase = {
             text: "You pull out a massive piece of broccoli. Barry takes a huge, deep breath.\n\nSats rise to 100% instantly.\n\nROBBY: Nice call on the Ketamine. If we paralyzed him, that would have been a nightmare.\n\n[CASE COMPLETE]",
             options: [],
             isTerminal: true,
-            effects: [{ type: 'WIN', description: 'Successfully removed obstruction using KOL.' }]
+            onEnter: [{ type: 'WIN', description: 'Successfully removed obstruction using KOL.' }]
         }
     }
 };

@@ -61,7 +61,7 @@ const PC005: PatientCase = {
             text: "You correctly diagnosed and treated the patient. Good work.",
             options: [],
             isTerminal: true,
-            effects: [{ type: 'WIN', description: 'Case Resolved' }]
+            onEnter: [{ type: 'WIN', description: 'Case Resolved' }]
         }
     }
 };

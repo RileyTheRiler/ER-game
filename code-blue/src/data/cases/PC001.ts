@@ -208,7 +208,7 @@ const PC001: PatientCase = {
             id: 'game_over_missed',
             text: "You reassure her it's nothing. \n\n2 HOURS LATER: Mrs. Martinez codes in the waiting room. Massive cardiac arrest. \n\n[GAME OVER]",
             options: [],
-            effects: [{ type: 'GAME_OVER' }],
+            onEnter: [{ type: 'GAME_OVER' }],
             isTerminal: true
         }
     }

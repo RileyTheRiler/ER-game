@@ -91,21 +91,21 @@ const PC092: PatientCase = {
             text: "You start cutting. The vibration sends the insects into a frenzy. Thousands of maggots pour out onto the bed, crawling everywhere. \n\nMr. Digby screams as they bite. The ER goes into lockdown for infestation.\n\n[GAME OVER]",
             options: [],
             isTerminal: true,
-            effects: [{ type: 'GAME_OVER' }]
+            onEnter: [{ type: 'GAME_OVER' }]
         },
         'bugs_scatter': {
             id: 'bugs_scatter',
             text: "The alcohol burns! The maggots scatter, crawling further UP the leg into his pants. \n\nMR. DIGBY: THEY'RE EVERYWHERE!\n\n[GAME OVER]",
             options: [],
             isTerminal: true,
-            effects: [{ type: 'GAME_OVER' }]
+            onEnter: [{ type: 'GAME_OVER' }]
         },
         'win_clean': {
             id: 'win_clean',
             text: "The leg underneath is pink and healthy. The maggots actually ate the necrotic tissue, leaving the healthy skin alone.\n\nMR. DIGBY: Feels much better. Thanks, doc.\n\n[CASE COMPLETE]",
             options: [],
             isTerminal: true,
-            effects: [{ type: 'WIN', description: 'Maggots removed safely. Leg saved.' }]
+            onEnter: [{ type: 'WIN', description: 'Maggots removed safely. Leg saved.' }]
         }
     }
 };

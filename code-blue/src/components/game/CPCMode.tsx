@@ -252,7 +252,7 @@ export const CPCMode: React.FC<CPCModeProps> = ({
                             max={60}
                             variant={timeLeft < 10 ? 'stress' : 'time'}
                             size="lg" // Now works
-                            showValue={false} // Now works
+                            showLabel={false}
                         />
                     </div>
                 </div>

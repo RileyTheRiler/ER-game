@@ -650,4 +650,146 @@ export const VitalSignsMonitor: React.FC<MonitorProps> = ({
   );
 };
 
+
+// ============================================
+// EKG STRIP COMPONENT
+// ============================================
+
+interface EKGStripProps {
+  rhythm: CardiacRhythm;
+  heartRate: number;
+  label?: string;
+  duration?: number; // seconds to display
+}
+
+export const EKGStrip: React.FC<EKGStripProps> = ({
+  rhythm,
+  heartRate,
+  label = 'Lead II',
+  duration = 6,
+}) => {
+  const ecgGenerator = useCallback(
+    (t: number) => generateECGPoint(t, heartRate, rhythm),
+    [heartRate, rhythm]
+  );
+
+  return (
+    <div className="bg-black border border-gray-800 rounded-lg overflow-hidden relative h-32 w-full">
+      <div className="absolute top-2 left-2 flex gap-4 z-10">
+        <span className="text-green-500 text-xs font-bold">{label}</span>
+        <span className="text-gray-500 text-xs font-mono">{heartRate} BPM</span>
+      </div>
+
+      {/* Grid Background */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none"
+        style={{
+          backgroundImage: 'linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px)',
+          backgroundSize: '20px 20px'
+        }}
+      />
+
+      <div className="h-full w-full flex items-center">
+        <WaveformCanvas
+          width={800} // Fixed width for strip usually, or use 100% via container? Canvas needs px
+          height={128}
+          color="#22c55e"
+          generatePoint={ecgGenerator}
+          speed={50}
+          lineWidth={1.5}
+        />
+      </div>
+    </div>
+  );
+};
+
+// ============================================
+// RHYTHM QUIZ COMPONENT
+// ============================================
+
+interface RhythmQuizProps {
+  correctRhythm: CardiacRhythm;
+  heartRate: number;
+  onAnswer: (correct: boolean) => void;
+  showHint?: boolean;
+}
+
+export const RhythmQuiz: React.FC<RhythmQuizProps> = ({
+  correctRhythm,
+  heartRate,
+  onAnswer,
+  showHint = false,
+}) => {
+  const [answered, setAnswered] = useState(false);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [isCorrect, setIsCorrect] = useState(false);
+
+  const options: { id: CardiacRhythm; label: string }[] = [
+    { id: 'normal_sinus', label: 'Normal Sinus Rhythm' },
+    { id: 'sinus_tachycardia', label: 'Sinus Tachycardia' },
+    { id: 'sinus_bradycardia', label: 'Sinus Bradycardia' },
+    { id: 'atrial_fibrillation', label: 'Atrial Fibrillation' },
+    { id: 'ventricular_tachycardia', label: 'Ventricular Tachycardia' },
+    { id: 'ventricular_fibrillation', label: 'Ventricular Fibrillation' },
+    { id: 'asystole', label: 'Asystole' },
+  ];
+
+  // Shuffle options and pick 4 including correct one
+  // simplified for now, just show fixed list or random subset
+  const quizOptions = options; // Show all for now
+
+  const handleGuess = (id: string) => {
+    if (answered) return;
+
+    const correct = id === correctRhythm;
+    setAnswered(true);
+    setSelected(id);
+    setIsCorrect(correct);
+    onAnswer(correct);
+  };
+
+  return (
+    <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-visible p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-bold text-white">Identify the Rhythm</h3>
+        {answered && (
+          <span className={`px-3 py-1 rounded-full text-sm font-bold ${isCorrect ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}`}>
+            {isCorrect ? 'CORRECT' : 'INCORRECT'}
+          </span>
+        )}
+      </div>
+
+      <EKGStrip rhythm={correctRhythm} heartRate={heartRate} label="Unknown Rhythm" />
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {quizOptions.map((opt) => (
+          <button
+            key={opt.id}
+            onClick={() => handleGuess(opt.id)}
+            disabled={answered}
+            className={`
+              p-3 rounded-lg text-sm font-bold transition-all
+              ${answered && opt.id === correctRhythm ? 'bg-green-600 text-white ring-2 ring-green-400' : ''}
+              ${answered && selected === opt.id && opt.id !== correctRhythm ? 'bg-red-600 text-white' : ''}
+              ${!answered ? 'bg-gray-800 hover:bg-gray-700 text-gray-300' : ''}
+              ${answered && opt.id !== correctRhythm && selected !== opt.id ? 'opacity-50 bg-gray-800' : ''}
+            `}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+
+      {answered && showHint && (
+        <div className="mt-4 p-4 bg-gray-800/50 rounded-lg text-sm text-gray-400">
+          <p>
+            <strong>Explanation:</strong> {correctRhythm.replace('_', ' ').toUpperCase()} is characterized by...
+            (Medical explanation placeholder)
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default VitalSignsMonitor;
+

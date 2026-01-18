@@ -119,7 +119,7 @@ const PC091: PatientCase = {
             id: 'reduction_success',
             text: "CLUNK.\n\nThe shoulder slides back into place. The arm falls to the patient's side naturally.\n\nROBBY: Beautiful. Cancel the OR. We're done here.",
             options: [],
-            effects: [
+            onEnter: [
                 { type: 'MODIFY_RELATIONSHIP', key: 'ROBBY', value: 5, target: 'PROFESSIONAL' },
                 { type: 'WIN', description: 'Successful ER Reduction of Luxatio Erecta' }
             ],
@@ -129,7 +129,7 @@ const PC091: PatientCase = {
             id: 'or_transfer',
             text: "Patient is transferred to Pre-Op. \n\nROBBY: Fine. Safe choice. Boring, but safe.\n\nThe patient waits 6 hours for an OR slot.",
             options: [],
-            effects: [{ type: 'WIN', description: 'Patient treated in OR (Safe but slow)' }],
+            onEnter: [{ type: 'WIN', description: 'Patient treated in OR (Safe but slow)' }],
             isTerminal: true
         },
         'fracture_bad': {

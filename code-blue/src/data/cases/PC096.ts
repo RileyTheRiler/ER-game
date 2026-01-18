@@ -80,7 +80,7 @@ const PC096: PatientCase = {
             text: "You give Potassium first. Once it rises to 3.5, you start the insulin.\n\n6 HOURS LATER: Gap is closed used. Orlando wakes up asking for water. Dr. Al-Hashimi nods at you.\n\nAL-HASHIMI: Smart. You didn't fall for the trap.\n\n[CASE COMPLETE]",
             options: [],
             isTerminal: true,
-            effects: [{ type: 'WIN', description: 'Safely managed DKA.' }]
+            onEnter: [{ type: 'WIN', description: 'Safely managed DKA.' }]
         }
     }
 };

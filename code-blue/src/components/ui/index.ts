@@ -13,7 +13,7 @@ export type { ModalProps } from './Modal';
 export { Badge, SkillBadge } from './Badge';
 export type { BadgeProps } from './Badge';
 
-export { ProgressBar, ShiftProgress } from './ProgressBar';
+export { ProgressBar } from './ProgressBar';
 export type { ProgressBarProps } from './ProgressBar';
 
 export {

@@ -112,7 +112,7 @@ const PC093: PatientCase = {
             text: "SISTER GRACE: From the linens? Oh my. That makes sense. \n\nYou treat with Ceftriaxone IM. The eye heals perfectly.\n\n[CASE COMPLETE]",
             options: [],
             isTerminal: true,
-            effects: [{ type: 'WIN', description: 'Correctly diagnosed Gonococcal inclusion conjunctivitis from fomites.' }]
+            onEnter: [{ type: 'WIN', description: 'Correctly diagnosed Gonococcal inclusion conjunctivitis from fomites.' }]
         }
     }
 };

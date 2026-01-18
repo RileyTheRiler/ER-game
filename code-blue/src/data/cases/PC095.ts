@@ -122,7 +122,7 @@ const PC095: PatientCase = {
             text: "The erection subsides almost immediately. Ian sighs in relief.\n\nIAN: Oh thank god. I'm never doing that again.\n\n[CASE COMPLETE]",
             options: [],
             isTerminal: true,
-            effects: [{ type: 'WIN', description: 'Priapism resolved.' }]
+            onEnter: [{ type: 'WIN', description: 'Priapism resolved.' }]
         }
     }
 };
