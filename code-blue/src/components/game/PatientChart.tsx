@@ -3,10 +3,9 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Patient, VitalSigns } from '@/types/medical';
-import { Card, CardHeader, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 
 // ============================================
@@ -96,20 +95,24 @@ const ChartSection: React.FC<{
     defaultOpen?: boolean;
 }> = ({ title, icon, children, defaultOpen = true }) => {
     const [isOpen, setIsOpen] = useState(defaultOpen);
+    const contentId = useId();
 
     return (
         <div className="border-b border-gray-700 last:border-0">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-800/50 transition-colors"
+                aria-expanded={isOpen}
+                aria-controls={contentId}
+                className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-800/50 transition-colors focus:outline-none focus:bg-gray-800/80 focus:ring-1 focus:ring-inset focus:ring-cyan-500/50"
             >
                 <div className="flex items-center gap-2">
-                    <span>{icon}</span>
+                    <span aria-hidden="true">{icon}</span>
                     <span className="text-gray-300 font-medium">{title}</span>
                 </div>
                 <motion.span
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     className="text-gray-500"
+                    aria-hidden="true"
                 >
                     ▼
                 </motion.span>
@@ -117,6 +120,9 @@ const ChartSection: React.FC<{
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
+                        id={contentId}
+                        role="region"
+                        aria-label={title}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
