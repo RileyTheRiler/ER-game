@@ -10,7 +10,11 @@ import { SettingsScreen } from './SettingsScreen';
 import { ShiftManager } from './ShiftManager';
 import { DemoEndScreen } from './DemoEndScreen';
 import { CPCMode } from './CPCMode';
+import { CharacterCreation } from './CharacterCreation';
+import { IntroSequence } from './IntroSequence';
+import { OrientationScene } from './OrientationScene';
 import { useGameStore } from '@/store/gameStore';
+import type { PlayerBackground, PersonalityAxes } from '@/types/character';
 
 export const GameContainer: React.FC = () => {
     const { phase, setPhase } = useGameState();
@@ -22,36 +26,44 @@ export const GameContainer: React.FC = () => {
 
     if (!mounted) return null;
 
-    // Handlers
+    // ============================================
+    // HANDLERS
+    // ============================================
+
+    // New Game now goes to Character Creation instead of jumping into gameplay
     const handleNewGame = () => {
-        // Create default player for now (Character Creation is next phase if needed)
-        createPlayer(
-            "Dr. Candidate",
-            "LATE_BLOOMER",
-            { confidence: 0, approach: 0, outlook: 0 }
-        );
+        setPhase('CHARACTER_CREATION');
+    };
+
+    // Called when character creation is complete
+    const handleCharacterCreated = (name: string, background: PlayerBackground, personality: PersonalityAxes) => {
+        createPlayer(name, background, personality);
+        setPhase('INTRO_SEQUENCE');
+    };
+
+    // Called when intro sequence is complete or skipped
+    const handleIntroComplete = () => {
+        setPhase('ORIENTATION');
+    };
+
+    // Called when orientation is complete or skipped
+    const handleOrientationComplete = () => {
         setPhase('SHIFT_START');
     };
 
     const handleContinue = () => {
-        // Persistence handles loading, just switch phase
-        setPhase('SHIFT_START'); // Updated phase
+        // Player already exists, skip intro and go straight to gameplay
+        setPhase('SHIFT_START');
     };
 
     const handleOpenSettings = () => {
-        // We don't really have a SETTINGS phase, but let's fake it or use MainMenu
-        // For simplicity, let's say MainMenu handles it, or we add a phase
-        // Let's rely on local state for settings if it's overlay, 
-        // BUT since we made a full screen component, let's treat it as a pseudo-phase
-        // or just swap component here.
-        setPhase('SETTINGS' as any); // Type cast until we add SETTINGS to GamePhase
+        setPhase('SETTINGS' as any);
     };
 
     const handleCloseSettings = () => {
         setPhase('MAIN_MENU');
     };
 
-    // Added handleStartCpcExam
     const handleStartCpcExam = () => {
         setPhase('CPC_EXAM');
     };
@@ -61,10 +73,12 @@ export const GameContainer: React.FC = () => {
     };
 
     const handleDemoEnd = () => {
-        setPhase('DEMO_END' as any); // Add to types later
+        setPhase('DEMO_END' as any);
     };
 
-    // Render based on Phase
+    // ============================================
+    // RENDER BASED ON PHASE
+    // ============================================
 
     if (phase === 'MAIN_MENU') {
         return (
@@ -72,33 +86,62 @@ export const GameContainer: React.FC = () => {
                 onNewGame={handleNewGame}
                 onContinue={handleContinue}
                 onSettings={handleOpenSettings}
-                onCpcExam={handleStartCpcExam} // Added onCpcExam prop
+                onCpcExam={handleStartCpcExam}
             />
         );
     }
 
-    // Temporary until we add SETTINGS to GamePhase type properly
+    // Character Creation - first step of new game
+    if (phase === 'CHARACTER_CREATION') {
+        return (
+            <CharacterCreation
+                onComplete={handleCharacterCreated}
+                onBack={() => setPhase('MAIN_MENU')}
+            />
+        );
+    }
+
+    // Intro Sequence - narrative introduction after character creation
+    if (phase === 'INTRO_SEQUENCE') {
+        return (
+            <IntroSequence
+                onComplete={handleIntroComplete}
+                onSkip={handleIntroComplete}
+            />
+        );
+    }
+
+    // Orientation - tutorial and team introduction
+    if (phase === 'ORIENTATION') {
+        return (
+            <OrientationScene
+                onComplete={handleOrientationComplete}
+                onSkip={handleOrientationComplete}
+            />
+        );
+    }
+
+    // Settings screen
     if ((phase as any) === 'SETTINGS') {
         return <SettingsScreen onBack={handleCloseSettings} />;
     }
 
+    // Demo end screen
     if ((phase as any) === 'DEMO_END') {
         return <DemoEndScreen onReturnToMenu={handleExitGame} />;
     }
 
-    // Added CPC_EXAM phase rendering
+    // CPC Exam mode
     if (phase === 'CPC_EXAM') {
         return <CPCMode onExit={handleExitGame} />;
     }
 
     // Any gameplay-related phase is handled by ShiftManager
-    // SHIFT_START, GAMEPLAY, PATIENT_ENCOUNTER, etc.
     if (['SHIFT_START', 'GAMEPLAY', 'BOARD', 'RELATIONSHIPS', 'PATIENT_ENCOUNTER', 'SKILL_CHECK', 'SHIFT_END'].includes(phase)) {
-        // Pass handleDemoEnd if ShiftManager triggers it (e.g. after shift end screen)
-        return <ShiftManager onExitGame={handleDemoEnd} />; // ShiftManager onExitGame actually used for "Continue" from shift end? We need to check ShiftManager props.
+        return <ShiftManager onExitGame={handleDemoEnd} />;
     }
 
-    // Fallback
+    // Fallback loading state
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-950 text-white scanline relative overflow-hidden">
             {/* Atmosphere layers */}
@@ -114,3 +157,4 @@ export const GameContainer: React.FC = () => {
 };
 
 export default GameContainer;
+

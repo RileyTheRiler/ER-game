@@ -106,6 +106,8 @@ export interface Lesson {
 export type GamePhase =
     | 'MAIN_MENU'
     | 'CHARACTER_CREATION'
+    | 'INTRO_SEQUENCE'
+    | 'ORIENTATION'
     | 'SHIFT_START'
     | 'GAMEPLAY'
     | 'PATIENT_ENCOUNTER'
