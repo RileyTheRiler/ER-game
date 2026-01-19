@@ -3,7 +3,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useGameState, useShift, usePlayer, useBoard } from '@/hooks/useGameState';
 import { ShiftStartScreen } from './ShiftStartScreen';
 import { ShiftEndScreen } from './ShiftEndScreen';
@@ -49,6 +49,15 @@ export const ShiftManager: React.FC<ShiftManagerProps> = ({
     const [viewMode, setViewMode] = useState<ViewMode>('QUEUE');
     const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
 
+    // Track mutable state in refs to prevent interval re-creation
+    const shiftProgressRef = useRef(shiftProgress);
+    const activeCasesRef = useRef(activeCases);
+
+    useEffect(() => {
+        shiftProgressRef.current = shiftProgress;
+        activeCasesRef.current = activeCases;
+    }, [shiftProgress, activeCases]);
+
     // ============================================
     // TIME & CASE GENERATION LOGIC
     // ============================================
@@ -62,13 +71,13 @@ export const ShiftManager: React.FC<ShiftManagerProps> = ({
                 advanceTime(1);
 
                 // 2. Check for shift end
-                if (shiftProgress >= 100) {
+                if (shiftProgressRef.current >= 100) {
                     setPhase('SHIFT_END');
                     return;
                 }
 
                 // 3. Try generating new case
-                if (Math.random() < getIncomingCaseChance(0, activeCases.length)) {
+                if (Math.random() < getIncomingCaseChance(0, activeCasesRef.current.length)) {
                     // Basic difficulty logic
                     const newCase = generateCase(shiftNumber, 1);
                     addCase(newCase);
@@ -78,7 +87,7 @@ export const ShiftManager: React.FC<ShiftManagerProps> = ({
         }
 
         return () => clearInterval(interval);
-    }, [phase, shiftProgress, activeCases.length, advanceTime, addCase, setPhase, shiftNumber]);
+    }, [phase, advanceTime, addCase, setPhase, shiftNumber]);
 
     // ============================================
     // HANDLERS
