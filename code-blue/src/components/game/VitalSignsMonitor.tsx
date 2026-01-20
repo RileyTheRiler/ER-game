@@ -256,16 +256,26 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
   const timeRef = useRef<number>(0);
   const lastFrameRef = useRef<number>(0);
 
+  // Keep the latest generator in a ref to avoid effect re-runs
+  const generatePointRef = useRef(generatePoint);
+  useEffect(() => {
+    generatePointRef.current = generatePoint;
+  }, [generatePoint]);
+
+  // Initialize data array only when width changes
+  useEffect(() => {
+    const dataPoints = Math.ceil(width);
+    if (dataRef.current.length !== dataPoints) {
+      dataRef.current = new Array(dataPoints).fill(0);
+    }
+  }, [width]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
-    // Initialize data array
-    const dataPoints = Math.ceil(width);
-    dataRef.current = new Array(dataPoints).fill(0);
 
     const animate = (timestamp: number) => {
       if (!lastFrameRef.current) lastFrameRef.current = timestamp;
@@ -279,7 +289,8 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
       for (let i = 0; i < newPoints; i++) {
         dataRef.current.shift();
         const t = timeRef.current + (i / speed);
-        dataRef.current.push(generatePoint(t));
+        // Use the ref here instead of dependency
+        dataRef.current.push(generatePointRef.current(t));
       }
 
       // Clear canvas
@@ -322,7 +333,7 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [width, height, color, generatePoint, speed, lineWidth]);
+  }, [width, height, color, speed, lineWidth]); // generatePoint removed
 
   return (
     <canvas
