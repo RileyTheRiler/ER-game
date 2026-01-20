@@ -23,6 +23,7 @@ import type {
     BoardEntry,
 } from '@/types/medical';
 import { v4 as uuid } from 'uuid';
+import { SECURITY_LIMITS, sanitizeString } from '@/utils/security';
 
 // ============================================
 // INITIAL STATE
@@ -164,9 +165,15 @@ export const useGameStore = create<GameState>()(
 
                 // Player Actions
                 createPlayer: (name, background, personality) => set((state) => {
+                    // Sanitize input
+                    const safeName = sanitizeString(name, SECURITY_LIMITS.MAX_PLAYER_NAME);
+                    const finalName = safeName.length >= SECURITY_LIMITS.MIN_PLAYER_NAME
+                        ? safeName
+                        : 'Dr. Unknown';
+
                     state.player = {
                         id: uuid(),
-                        name,
+                        name: finalName,
                         background,
                         personalityAxes: personality,
                         skills: createInitialSkills(background),
@@ -277,6 +284,10 @@ export const useGameStore = create<GameState>()(
                     if (currentCount + pinnedCount < state.maxBoardSlots || entry.pinned) {
                         state.boardEntries.push({
                             ...entry,
+                            content: sanitizeString(entry.content, SECURITY_LIMITS.MAX_BOARD_CONTENT),
+                            description: entry.description
+                                ? sanitizeString(entry.description, SECURITY_LIMITS.MAX_BOARD_DESCRIPTION)
+                                : undefined,
                             id: uuid(),
                             createdAt: Date.now(),
                         });
@@ -333,7 +344,7 @@ export const useGameStore = create<GameState>()(
                         ));
                         rel.history.push({
                             shiftNumber: state.currentShiftNumber,
-                            description: change.reason,
+                            description: sanitizeString(change.reason, SECURITY_LIMITS.MAX_RELATIONSHIP_REASON),
                             professionalDelta: change.professionalDelta,
                             personalDelta: change.personalDelta,
                             timestamp: Date.now(),
