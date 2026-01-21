@@ -256,6 +256,14 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
   const timeRef = useRef<number>(0);
   const lastFrameRef = useRef<number>(0);
 
+  // Performance Optimization:
+  // Store the generator function in a ref so we can update it without restarting the animation loop.
+  // This prevents the canvas from being cleared/reset when the heart rate changes.
+  const generatePointRef = useRef(generatePoint);
+  useEffect(() => {
+    generatePointRef.current = generatePoint;
+  }, [generatePoint]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -279,7 +287,8 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
       for (let i = 0; i < newPoints; i++) {
         dataRef.current.shift();
         const t = timeRef.current + (i / speed);
-        dataRef.current.push(generatePoint(t));
+        // Use the ref here instead of the prop directly
+        dataRef.current.push(generatePointRef.current(t));
       }
 
       // Clear canvas
@@ -322,7 +331,8 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [width, height, color, generatePoint, speed, lineWidth]);
+    // Removed generatePoint from dependency array to prevent re-initialization
+  }, [width, height, color, speed, lineWidth]);
 
   return (
     <canvas
@@ -792,4 +802,3 @@ export const RhythmQuiz: React.FC<RhythmQuizProps> = ({
 };
 
 export default VitalSignsMonitor;
-
