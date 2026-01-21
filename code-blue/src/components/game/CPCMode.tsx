@@ -253,6 +253,7 @@ export const CPCMode: React.FC<CPCModeProps> = ({
                             variant={timeLeft < 10 ? 'stress' : 'time'}
                             size="lg" // Now works
                             showLabel={false}
+                            aria-label="Time Remaining"
                         />
                     </div>
                 </div>
