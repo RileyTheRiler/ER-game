@@ -246,7 +246,11 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
                                 Everyone comes to medicine from somewhere. Where did you come from?
                             </p>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div
+                                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                                role="radiogroup"
+                                aria-label="Select your background"
+                            >
                                 {BACKGROUNDS.map((bg) => (
                                     <motion.div
                                         key={bg.id}
@@ -257,8 +261,17 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
                                             className={`cursor-pointer transition-all p-4 h-full ${selectedBackground === bg.id
                                                     ? 'border-cyan-500 bg-cyan-950/30 shadow-[0_0_15px_rgba(34,211,238,0.2)]'
                                                     : 'hover:border-gray-600'
-                                                }`}
+                                                } outline-none focus-visible:ring-2 focus-visible:ring-cyan-500`}
                                             onClick={() => handleBackgroundSelect(bg.id)}
+                                            role="radio"
+                                            aria-checked={selectedBackground === bg.id}
+                                            tabIndex={0}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter' || e.key === ' ') {
+                                                    e.preventDefault();
+                                                    handleBackgroundSelect(bg.id);
+                                                }
+                                            }}
                                         >
                                             <div className="flex items-start gap-3">
                                                 <span className="text-3xl">{bg.icon}</span>
@@ -353,6 +366,7 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({ onComplete
                                                 max={3}
                                                 step={1}
                                                 value={personality[axis]}
+                                                aria-label={`${axis} level`}
                                                 onChange={(e) => setPersonality({
                                                     ...personality,
                                                     [axis]: parseInt(e.target.value),

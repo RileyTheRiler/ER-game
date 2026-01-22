@@ -7,7 +7,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export interface CardProps {
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
     variant?: 'default' | 'elevated' | 'outlined' | 'critical' | 'monitor' | 'panel';
     className?: string;
@@ -32,6 +32,7 @@ export const Card: React.FC<CardProps> = ({
     onClick,
     hoverable = false,
     noPadding = false,
+    ...props
 }) => {
     const Component = onClick || hoverable ? motion.div : 'div';
 
@@ -43,6 +44,7 @@ export const Card: React.FC<CardProps> = ({
       ${className}
     `,
         onClick,
+        ...props
     };
 
     const motionProps = onClick || hoverable ? {
@@ -56,6 +58,7 @@ export const Card: React.FC<CardProps> = ({
     } : {};
 
     return (
+        // @ts-expect-error - Framer motion types are complex with dynamic components
         <Component {...baseProps} {...motionProps}>
             {/* Corner accents for Monitor variant */}
             {variant === 'monitor' && (
