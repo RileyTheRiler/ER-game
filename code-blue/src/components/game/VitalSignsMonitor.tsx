@@ -256,6 +256,13 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
   const timeRef = useRef<number>(0);
   const lastFrameRef = useRef<number>(0);
 
+  // OPTIMIZATION: Use ref for generatePoint to avoid restarting animation loop when vitals change.
+  // This prevents the waveform history from being wiped (visual reset) every time the heart rate updates.
+  const generatePointRef = useRef(generatePoint);
+  useEffect(() => {
+    generatePointRef.current = generatePoint;
+  }, [generatePoint]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -265,7 +272,10 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
 
     // Initialize data array
     const dataPoints = Math.ceil(width);
-    dataRef.current = new Array(dataPoints).fill(0);
+    // Only reset if size changed or first run
+    if (dataRef.current.length !== dataPoints) {
+      dataRef.current = new Array(dataPoints).fill(0);
+    }
 
     const animate = (timestamp: number) => {
       if (!lastFrameRef.current) lastFrameRef.current = timestamp;
@@ -279,7 +289,8 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
       for (let i = 0; i < newPoints; i++) {
         dataRef.current.shift();
         const t = timeRef.current + (i / speed);
-        dataRef.current.push(generatePoint(t));
+        // Use ref to get latest generator without restarting loop
+        dataRef.current.push(generatePointRef.current(t));
       }
 
       // Clear canvas
@@ -322,7 +333,7 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [width, height, color, generatePoint, speed, lineWidth]);
+  }, [width, height, color, speed, lineWidth]); // Removed generatePoint
 
   return (
     <canvas
