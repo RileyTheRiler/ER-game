@@ -2,18 +2,26 @@
 // Custom hooks for accessing game state
 
 import { useCallback, useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { useGameStore } from '@/store/gameStore';
-import type { SkillId, GamePhase, BoardEntry } from '@/types';
-import type { RelationshipChange } from '@/types/character';
+import type { SkillId } from '@/types';
 
 // ============================================
 // CORE GAME STATE HOOK
 // ============================================
 
-export const useGameState = () => {
-    const store = useGameStore();
+// Optimized selector for phase-only updates to prevent re-renders on every timer tick
+export const useGamePhase = () => {
+    return useGameStore(useShallow(state => ({
+        phase: state.currentPhase,
+        previousPhase: state.previousPhase,
+        setPhase: state.setPhase,
+    })));
+};
 
-    return {
+export const useGameState = () => {
+    // Use shallow comparison to prevent re-renders when unselected state changes
+    return useGameStore(useShallow(store => ({
         // Phase
         phase: store.currentPhase,
         previousPhase: store.previousPhase,
@@ -34,7 +42,7 @@ export const useGameState = () => {
         isInShift: store.currentPhase !== 'MAIN_MENU' &&
             store.currentPhase !== 'CHARACTER_CREATION' &&
             store.currentShiftNumber > 0,
-    };
+    })));
 };
 
 // ============================================

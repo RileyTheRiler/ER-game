@@ -3,8 +3,8 @@
 
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
-import { useGameState, useShift, usePlayer, useBoard } from '@/hooks/useGameState';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useGamePhase, useShift } from '@/hooks/useGameState';
 import { ShiftStartScreen } from './ShiftStartScreen';
 import { ShiftEndScreen } from './ShiftEndScreen';
 import { ShiftHUD } from './ShiftHUD';
@@ -34,7 +34,7 @@ export const ShiftManager: React.FC<ShiftManagerProps> = ({
     onExitGame,
     className = '',
 }) => {
-    const { phase, setPhase } = useGameState();
+    const { phase, setPhase } = useGamePhase();
     const {
         shiftNumber,
         startShift,
@@ -100,9 +100,9 @@ export const ShiftManager: React.FC<ShiftManagerProps> = ({
         setPhase('GAMEPLAY');
     };
 
-    const handleCaseSelect = (caseId: string) => {
+    const handleCaseSelect = useCallback((caseId: string) => {
         setSelectedCaseId(caseId);
-    };
+    }, []);
 
     const handleEnterEncounter = () => {
         if (selectedCaseId) {
