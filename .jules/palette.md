@@ -1,0 +1,3 @@
+## 2024-05-22 - Accessibility in Custom UI Components
+**Learning:** Custom UI components representing values (like progress bars) often lack semantic HTML or ARIA roles, making them invisible to screen readers.
+**Action:** Always extend `React.HTMLAttributes` for container props, include standard ARIA roles/attributes (`role`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`), and support `aria-label` overrides. Visual text labels paired with these components should use `aria-hidden="true"` to prevent duplicate announcements if `aria-label` or `aria-labelledby` is used correctly on the component itself.
