@@ -123,6 +123,7 @@ export const ShiftHUD: React.FC<ShiftHUDProps> = ({
                                 max={100}
                                 variant="energy"
                                 size="sm"
+                                aria-label="Player Energy"
                             />
                         </div>
 
@@ -136,6 +137,7 @@ export const ShiftHUD: React.FC<ShiftHUDProps> = ({
                                 max={100}
                                 variant="stress"
                                 size="sm"
+                                aria-label="Player Stress"
                             />
                         </div>
                     </div>
@@ -143,18 +145,18 @@ export const ShiftHUD: React.FC<ShiftHUDProps> = ({
                     {/* Quick Action Buttons */}
                     <div className="flex items-center gap-2 border-l border-gray-800 pl-6">
                         {onOpenBoard && (
-                            <Button variant="ghost" size="icon" onClick={onOpenBoard} title="Diagnostic Board">
-                                <span className="text-xl">🧠</span>
+                            <Button variant="ghost" size="icon" onClick={onOpenBoard} title="Diagnostic Board" aria-label="Diagnostic Board">
+                                <span className="text-xl" aria-hidden="true">🧠</span>
                             </Button>
                         )}
                         {onOpenRelationships && (
-                            <Button variant="ghost" size="icon" onClick={onOpenRelationships} title="Relationships">
-                                <span className="text-xl">👥</span>
+                            <Button variant="ghost" size="icon" onClick={onOpenRelationships} title="Relationships" aria-label="Relationships">
+                                <span className="text-xl" aria-hidden="true">👥</span>
                             </Button>
                         )}
                         {onOpenMenu && (
-                            <Button variant="ghost" size="icon" onClick={onOpenMenu} title="System Menu">
-                                <span className="text-xl">☰</span>
+                            <Button variant="ghost" size="icon" onClick={onOpenMenu} title="System Menu" aria-label="System Menu">
+                                <span className="text-xl" aria-hidden="true">☰</span>
                             </Button>
                         )}
                     </div>

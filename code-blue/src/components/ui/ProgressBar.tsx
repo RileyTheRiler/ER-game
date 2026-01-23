@@ -3,10 +3,10 @@
 
 'use client';
 
-import React from 'react';
+import React, { useId } from 'react';
 import { motion } from 'framer-motion';
 
-export interface ProgressBarProps {
+export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
     value: number;
     max: number;
     variant?: 'default' | 'time' | 'energy' | 'stress' | 'health';
@@ -48,13 +48,28 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     label,
     className = '',
     animate = true,
+    ...props
 }) => {
     const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
+    const labelId = useId();
 
     return (
-        <div className={`w-full ${className}`}>
+        <div
+            className={`w-full ${className}`}
+            role="progressbar"
+            aria-valuenow={Math.round(value)}
+            aria-valuemin={0}
+            aria-valuemax={max}
+            aria-labelledby={label ? labelId : undefined}
+            aria-label={!label ? "Progress" : undefined}
+            {...props}
+        >
             {(showLabel || label) && (
-                <div className="flex justify-between items-center mb-1 text-xs uppercase tracking-wider font-semibold text-gray-400">
+                <div
+                    id={labelId}
+                    className="flex justify-between items-center mb-1 text-xs uppercase tracking-wider font-semibold text-gray-400"
+                    aria-hidden="true"
+                >
                     <span>{label}</span>
                     {showLabel && <span>{Math.round(value)}/{max}</span>}
                 </div>
