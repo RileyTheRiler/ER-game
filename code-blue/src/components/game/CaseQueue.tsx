@@ -119,7 +119,8 @@ const CaseCard: React.FC<CaseCardProps> = ({
 // MAIN COMPONENT
 // ============================================
 
-export const CaseQueue: React.FC<CaseQueueProps> = ({
+// Memoized to prevent re-renders when parent state (like time) updates but cases haven't changed
+export const CaseQueue: React.FC<CaseQueueProps> = React.memo(({
     activeCases,
     waitingCases = [],
     onSelectCase,
@@ -214,6 +215,6 @@ export const CaseQueue: React.FC<CaseQueueProps> = ({
             </div>
         </div>
     );
-};
+});
 
 export default CaseQueue;
