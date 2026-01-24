@@ -1,0 +1,17 @@
+
+> code-blue@0.1.0 dev /app/code-blue
+> next dev
+
+▲ Next.js 16.1.3 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+✓ Ready in 1155ms
+○ Compiling / ...
+ GET / 200 in 7.1s (compile: 6.2s, render: 846ms)
+ GET /sounds/ui/success.mp3 404 in 1545ms (compile: 1261ms, render: 284ms)
+ GET /sounds/ui/hover.mp3 404 in 1551ms (compile: 1193ms, render: 358ms)
+ GET /sounds/ui/error.mp3 404 in 1549ms (compile: 1291ms, render: 258ms)
+ GET /noise.png 404 in 2.1s (compile: 1876ms, render: 194ms)
+ GET /sounds/ui/click.mp3 404 in 1566ms (compile: 1345ms, render: 221ms)
