@@ -123,6 +123,7 @@ export const ShiftHUD: React.FC<ShiftHUDProps> = ({
                                 max={100}
                                 variant="energy"
                                 size="sm"
+                                aria-label="Energy"
                             />
                         </div>
 
@@ -136,6 +137,7 @@ export const ShiftHUD: React.FC<ShiftHUDProps> = ({
                                 max={100}
                                 variant="stress"
                                 size="sm"
+                                aria-label="Stress"
                             />
                         </div>
                     </div>
