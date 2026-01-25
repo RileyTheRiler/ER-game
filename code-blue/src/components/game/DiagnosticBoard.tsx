@@ -27,7 +27,7 @@ type FilterType = 'ALL' | BoardEntryType['type'];
 // MAIN COMPONENT
 // ============================================
 
-export const DiagnosticBoard: React.FC<DiagnosticBoardProps> = ({
+const DiagnosticBoardComponent: React.FC<DiagnosticBoardProps> = ({
     className = '',
     compact = false,
 }) => {
@@ -285,5 +285,8 @@ export const DiagnosticBoard: React.FC<DiagnosticBoardProps> = ({
         </div>
     );
 };
+
+export const DiagnosticBoard = React.memo(DiagnosticBoardComponent);
+DiagnosticBoard.displayName = 'DiagnosticBoard';
 
 export default DiagnosticBoard;

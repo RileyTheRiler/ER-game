@@ -98,7 +98,7 @@ export const NPCCard: React.FC<NPCCardProps> = ({
                     <div className="flex-1">
                         <h3 className="text-white font-semibold text-lg">{npc.name}</h3>
                         {npc.nickname && (
-                            <div className="text-cyan-400 text-sm">"{npc.nickname}"</div>
+                            <div className="text-cyan-400 text-sm">&quot;{npc.nickname}&quot;</div>
                         )}
                         <div className="text-gray-400 text-sm mt-1">{npc.role}</div>
                     </div>
@@ -151,7 +151,7 @@ export const NPCCard: React.FC<NPCCardProps> = ({
 
                 {/* Preview quote */}
                 <div className="mt-4 pt-4 border-t border-gray-700">
-                    <p className="text-gray-400 text-sm italic">"{greeting}"</p>
+                    <p className="text-gray-400 text-sm italic">&quot;{greeting}&quot;</p>
                 </div>
             </CardContent>
         </Card>
@@ -227,7 +227,7 @@ export const NPCDetail: React.FC<{ npc: NPC; relationship: Relationship | null }
                                 className="p-3 bg-gray-800/50 rounded-lg border border-gray-700"
                             >
                                 <div className="text-white font-medium text-sm">{moment.title}</div>
-                                <div className="text-gray-400 text-xs mt-1 italic">"{moment.lesson}"</div>
+                                <div className="text-gray-400 text-xs mt-1 italic">&quot;{moment.lesson}&quot;</div>
                             </div>
                         ))}
                     </div>
@@ -242,7 +242,7 @@ export const NPCDetail: React.FC<{ npc: NPC; relationship: Relationship | null }
                     </h3>
                     {Object.entries(npc.uniqueDialogue).slice(0, 2).map(([key, value]) => (
                         <p key={key} className="text-gray-400 text-sm italic mb-2">
-                            "{value}"
+                            &quot;{value}&quot;
                         </p>
                     ))}
                 </div>
@@ -255,7 +255,7 @@ export const NPCDetail: React.FC<{ npc: NPC; relationship: Relationship | null }
 // MAIN PANEL
 // ============================================
 
-export const RelationshipPanel: React.FC<RelationshipPanelProps> = ({
+const RelationshipPanelComponent: React.FC<RelationshipPanelProps> = ({
     npcIds = ['jimmy', 'maria', 'okonkwo'],
     compact = false,
     className = '',
@@ -321,5 +321,8 @@ export const RelationshipPanel: React.FC<RelationshipPanelProps> = ({
         </div>
     );
 };
+
+export const RelationshipPanel = React.memo(RelationshipPanelComponent);
+RelationshipPanel.displayName = 'RelationshipPanel';
 
 export default RelationshipPanel;
