@@ -119,7 +119,7 @@ const CaseCard: React.FC<CaseCardProps> = ({
 // MAIN COMPONENT
 // ============================================
 
-export const CaseQueue: React.FC<CaseQueueProps> = ({
+const CaseQueueComponent: React.FC<CaseQueueProps> = ({
     activeCases,
     waitingCases = [],
     onSelectCase,
@@ -215,5 +215,8 @@ export const CaseQueue: React.FC<CaseQueueProps> = ({
         </div>
     );
 };
+
+export const CaseQueue = React.memo(CaseQueueComponent);
+CaseQueue.displayName = 'CaseQueue';
 
 export default CaseQueue;
