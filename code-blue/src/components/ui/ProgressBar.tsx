@@ -59,7 +59,13 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
                     {showLabel && <span>{Math.round(value)}/{max}</span>}
                 </div>
             )}
-            <div className={`
+            <div
+                role="progressbar"
+                aria-valuenow={Math.round(value)}
+                aria-valuemin={0}
+                aria-valuemax={max}
+                aria-label={label}
+                className={`
         w-full rounded-full overflow-hidden border border-white/5
         ${variantBackgrounds[variant]}
         ${sizeStyles[size]}
