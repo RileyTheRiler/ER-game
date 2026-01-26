@@ -3,7 +3,7 @@
 
 'use client';
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useId } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 
@@ -36,6 +36,8 @@ export const Modal: React.FC<ModalProps> = ({
     closeOnOverlayClick = true,
     closeOnEscape = true,
 }) => {
+    const titleId = useId();
+
     // Close on Escape key
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
         if (e.key === 'Escape' && closeOnEscape) {
@@ -72,6 +74,9 @@ export const Modal: React.FC<ModalProps> = ({
 
                     {/* Modal */}
                     <motion.div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby={title ? titleId : undefined}
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -86,11 +91,12 @@ export const Modal: React.FC<ModalProps> = ({
                         {(title || showCloseButton) && (
                             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
                                 {title && (
-                                    <h2 className="text-lg font-semibold text-white">{title}</h2>
+                                    <h2 id={titleId} className="text-lg font-semibold text-white">{title}</h2>
                                 )}
                                 {showCloseButton && (
                                     <button
                                         onClick={onClose}
+                                        aria-label="Close"
                                         className="text-gray-400 hover:text-white transition-colors p-1"
                                     >
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
