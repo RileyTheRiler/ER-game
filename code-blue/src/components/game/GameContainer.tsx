@@ -3,8 +3,8 @@
 
 'use client';
 
-import React, { useEffect } from 'react';
-import { useGameState, usePlayer } from '@/hooks/useGameState';
+import React, { useEffect, useCallback } from 'react';
+import { useGamePhase } from '@/hooks/useGameState';
 import { MainMenu } from './MainMenu';
 import { SettingsScreen } from './SettingsScreen';
 import { ShiftManager } from './ShiftManager';
@@ -17,64 +17,69 @@ import { useGameStore } from '@/store/gameStore';
 import type { PlayerBackground, PersonalityAxes } from '@/types/character';
 
 export const GameContainer: React.FC = () => {
-    const { phase, setPhase } = useGameState();
+    const { phase, setPhase } = useGamePhase();
     const createPlayer = useGameStore(state => state.createPlayer);
 
     // Prevent hydration mismatch by waiting for mount
     const [mounted, setMounted] = React.useState(false);
-    useEffect(() => setMounted(true), []);
-
-    if (!mounted) return null;
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true);
+    }, []);
 
     // ============================================
     // HANDLERS
     // ============================================
 
     // New Game now goes to Character Creation instead of jumping into gameplay
-    const handleNewGame = () => {
+    const handleNewGame = useCallback(() => {
         setPhase('CHARACTER_CREATION');
-    };
+    }, [setPhase]);
 
     // Called when character creation is complete
-    const handleCharacterCreated = (name: string, background: PlayerBackground, personality: PersonalityAxes) => {
+    const handleCharacterCreated = useCallback((name: string, background: PlayerBackground, personality: PersonalityAxes) => {
         createPlayer(name, background, personality);
         setPhase('INTRO_SEQUENCE');
-    };
+    }, [createPlayer, setPhase]);
 
     // Called when intro sequence is complete or skipped
-    const handleIntroComplete = () => {
+    const handleIntroComplete = useCallback(() => {
         setPhase('ORIENTATION');
-    };
+    }, [setPhase]);
 
     // Called when orientation is complete or skipped
-    const handleOrientationComplete = () => {
+    const handleOrientationComplete = useCallback(() => {
         setPhase('SHIFT_START');
-    };
+    }, [setPhase]);
 
-    const handleContinue = () => {
+    const handleContinue = useCallback(() => {
         // Player already exists, skip intro and go straight to gameplay
         setPhase('SHIFT_START');
-    };
+    }, [setPhase]);
 
-    const handleOpenSettings = () => {
+    const handleOpenSettings = useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setPhase('SETTINGS' as any);
-    };
+    }, [setPhase]);
 
-    const handleCloseSettings = () => {
+    const handleCloseSettings = useCallback(() => {
         setPhase('MAIN_MENU');
-    };
+    }, [setPhase]);
 
-    const handleStartCpcExam = () => {
+    const handleStartCpcExam = useCallback(() => {
         setPhase('CPC_EXAM');
-    };
+    }, [setPhase]);
 
-    const handleExitGame = () => {
+    const handleExitGame = useCallback(() => {
         setPhase('MAIN_MENU');
-    };
+    }, [setPhase]);
 
-    const handleDemoEnd = () => {
+    const handleDemoEnd = useCallback(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setPhase('DEMO_END' as any);
-    };
+    }, [setPhase]);
+
+    if (!mounted) return null;
 
     // ============================================
     // RENDER BASED ON PHASE
@@ -96,7 +101,7 @@ export const GameContainer: React.FC = () => {
         return (
             <CharacterCreation
                 onComplete={handleCharacterCreated}
-                onBack={() => setPhase('MAIN_MENU')}
+                onBack={handleExitGame}
             />
         );
     }
@@ -122,11 +127,13 @@ export const GameContainer: React.FC = () => {
     }
 
     // Settings screen
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((phase as any) === 'SETTINGS') {
         return <SettingsScreen onBack={handleCloseSettings} />;
     }
 
     // Demo end screen
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((phase as any) === 'DEMO_END') {
         return <DemoEndScreen onReturnToMenu={handleExitGame} />;
     }
