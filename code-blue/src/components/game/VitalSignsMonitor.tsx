@@ -256,6 +256,13 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
   const timeRef = useRef<number>(0);
   const lastFrameRef = useRef<number>(0);
 
+  // Refs for mutable props to avoid re-triggering effect
+  const propsRef = useRef({ generatePoint, height, color, speed, lineWidth });
+
+  useEffect(() => {
+    propsRef.current = { generatePoint, height, color, speed, lineWidth };
+  }, [generatePoint, height, color, speed, lineWidth]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -268,6 +275,8 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
     dataRef.current = new Array(dataPoints).fill(0);
 
     const animate = (timestamp: number) => {
+      const { generatePoint, height, color, speed, lineWidth } = propsRef.current;
+
       if (!lastFrameRef.current) lastFrameRef.current = timestamp;
       const deltaTime = (timestamp - lastFrameRef.current) / 1000;
       lastFrameRef.current = timestamp;
@@ -322,7 +331,7 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [width, height, color, generatePoint, speed, lineWidth]);
+  }, [width]); // Only width triggers full reset
 
   return (
     <canvas
