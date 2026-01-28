@@ -256,6 +256,12 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
   const timeRef = useRef<number>(0);
   const lastFrameRef = useRef<number>(0);
 
+  // Keep latest generatePoint in a ref to avoid restarting animation loop
+  const generatePointRef = useRef(generatePoint);
+  useEffect(() => {
+    generatePointRef.current = generatePoint;
+  }, [generatePoint]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -279,7 +285,7 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
       for (let i = 0; i < newPoints; i++) {
         dataRef.current.shift();
         const t = timeRef.current + (i / speed);
-        dataRef.current.push(generatePoint(t));
+        dataRef.current.push(generatePointRef.current(t));
       }
 
       // Clear canvas
@@ -322,7 +328,7 @@ const WaveformCanvas: React.FC<WaveformCanvasProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [width, height, color, generatePoint, speed, lineWidth]);
+  }, [width, height, color, speed, lineWidth]); // Removed generatePoint
 
   return (
     <canvas
@@ -413,6 +419,7 @@ export const VitalSignsMonitor: React.FC<MonitorProps> = ({
     if (alarmActive && !alarmMuted && hasCritical) {
       // Create alarm beep
       if (!audioContextRef.current) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
       }
 
