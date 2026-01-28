@@ -6,7 +6,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export interface ProgressBarProps {
+export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
     value: number;
     max: number;
     variant?: 'default' | 'time' | 'energy' | 'stress' | 'health';
@@ -48,22 +48,32 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     label,
     className = '',
     animate = true,
+    "aria-label": ariaLabel,
+    ...props
 }) => {
     const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
+    const effectiveLabel = label || ariaLabel;
 
     return (
-        <div className={`w-full ${className}`}>
+        <div className={`w-full ${className}`} {...props}>
             {(showLabel || label) && (
                 <div className="flex justify-between items-center mb-1 text-xs uppercase tracking-wider font-semibold text-gray-400">
                     <span>{label}</span>
                     {showLabel && <span>{Math.round(value)}/{max}</span>}
                 </div>
             )}
-            <div className={`
+            <div
+                role="progressbar"
+                aria-valuenow={value}
+                aria-valuemin={0}
+                aria-valuemax={max}
+                aria-label={effectiveLabel}
+                className={`
         w-full rounded-full overflow-hidden border border-white/5
         ${variantBackgrounds[variant]}
         ${sizeStyles[size]}
-      `}>
+      `}
+            >
                 <motion.div
                     className={`h-full relative ${variantColors[variant]}`}
                     initial={animate ? { width: 0 } : { width: `${percentage}%` }}
