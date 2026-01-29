@@ -3,7 +3,7 @@
 
 'use client';
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef, useId } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 
@@ -36,21 +36,74 @@ export const Modal: React.FC<ModalProps> = ({
     closeOnOverlayClick = true,
     closeOnEscape = true,
 }) => {
-    // Close on Escape key
-    const handleKeyDown = useCallback((e: KeyboardEvent) => {
-        if (e.key === 'Escape' && closeOnEscape) {
-            onClose();
+    const titleId = useId();
+    const modalRef = useRef<HTMLDivElement>(null);
+    const previousFocusRef = useRef<HTMLElement | null>(null);
+
+    // Focus management
+    useEffect(() => {
+        if (isOpen) {
+            previousFocusRef.current = document.activeElement as HTMLElement;
+
+            // Focus the modal or first focusable element
+            // We'll focus the modal itself first to ensure screen readers announce it
+            // using requestAnimationFrame to ensure the element is mounted and rendered
+            requestAnimationFrame(() => {
+                if (modalRef.current) {
+                    modalRef.current.focus();
+                }
+            });
+
+            document.body.style.overflow = 'hidden';
+        } else {
+            // Restore focus
+            if (previousFocusRef.current) {
+                previousFocusRef.current.focus();
+            }
+            document.body.style.overflow = '';
         }
-    }, [closeOnEscape, onClose]);
+    }, [isOpen]);
+
+    // Handle Escape and Focus Trap
+    const handleKeyDown = useCallback((e: KeyboardEvent) => {
+        if (!isOpen) return;
+
+        if (e.key === 'Escape' && closeOnEscape) {
+            e.preventDefault();
+            onClose();
+            return;
+        }
+
+        if (e.key === 'Tab' && modalRef.current) {
+            const focusableElements = modalRef.current.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+
+            if (focusableElements.length === 0) return;
+
+            const firstElement = focusableElements[0] as HTMLElement;
+            const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+            if (e.shiftKey) {
+                if (document.activeElement === firstElement || document.activeElement === modalRef.current) {
+                    e.preventDefault();
+                    lastElement.focus();
+                }
+            } else {
+                if (document.activeElement === lastElement) {
+                    e.preventDefault();
+                    firstElement.focus();
+                }
+            }
+        }
+    }, [isOpen, closeOnEscape, onClose]);
 
     useEffect(() => {
         if (isOpen) {
             document.addEventListener('keydown', handleKeyDown);
-            document.body.style.overflow = 'hidden';
         }
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
-            document.body.style.overflow = '';
         };
     }, [isOpen, handleKeyDown]);
 
@@ -59,7 +112,10 @@ export const Modal: React.FC<ModalProps> = ({
     return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4"
+                    role="presentation"
+                >
                     {/* Overlay */}
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -68,10 +124,16 @@ export const Modal: React.FC<ModalProps> = ({
                         transition={{ duration: 0.15 }}
                         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
                         onClick={closeOnOverlayClick ? onClose : undefined}
+                        aria-hidden="true"
                     />
 
                     {/* Modal */}
                     <motion.div
+                        ref={modalRef}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby={title ? titleId : undefined}
+                        tabIndex={-1}
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -79,21 +141,22 @@ export const Modal: React.FC<ModalProps> = ({
                         className={`
               relative w-full ${sizeStyles[size]}
               bg-gray-900 border border-gray-700 rounded-xl
-              shadow-2xl
+              shadow-2xl outline-none
             `}
                     >
                         {/* Header */}
                         {(title || showCloseButton) && (
                             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
                                 {title && (
-                                    <h2 className="text-lg font-semibold text-white">{title}</h2>
+                                    <h2 id={titleId} className="text-lg font-semibold text-white">{title}</h2>
                                 )}
                                 {showCloseButton && (
                                     <button
                                         onClick={onClose}
-                                        className="text-gray-400 hover:text-white transition-colors p-1"
+                                        aria-label="Close"
+                                        className="text-gray-400 hover:text-white transition-colors p-1 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
