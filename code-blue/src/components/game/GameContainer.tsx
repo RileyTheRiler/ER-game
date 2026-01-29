@@ -4,7 +4,6 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useGameState, usePlayer } from '@/hooks/useGameState';
 import { MainMenu } from './MainMenu';
 import { SettingsScreen } from './SettingsScreen';
 import { ShiftManager } from './ShiftManager';
@@ -17,7 +16,8 @@ import { useGameStore } from '@/store/gameStore';
 import type { PlayerBackground, PersonalityAxes } from '@/types/character';
 
 export const GameContainer: React.FC = () => {
-    const { phase, setPhase } = useGameState();
+    const phase = useGameStore(state => state.currentPhase);
+    const setPhase = useGameStore(state => state.setPhase);
     const createPlayer = useGameStore(state => state.createPlayer);
 
     // Prevent hydration mismatch by waiting for mount

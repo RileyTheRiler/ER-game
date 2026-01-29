@@ -3,8 +3,8 @@
 
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
-import { useGameState, useShift, usePlayer, useBoard } from '@/hooks/useGameState';
+import React, { useEffect, useState } from 'react';
+import { useGameStore } from '@/store/gameStore';
 import { ShiftStartScreen } from './ShiftStartScreen';
 import { ShiftEndScreen } from './ShiftEndScreen';
 import { ShiftHUD } from './ShiftHUD';
@@ -34,29 +34,18 @@ export const ShiftManager: React.FC<ShiftManagerProps> = ({
     onExitGame,
     className = '',
 }) => {
-    const { phase, setPhase } = useGameState();
-    const {
-        shiftNumber,
-        startShift,
-        endShift,
-        advanceTime,
-        activeCases,
-        addCase,
-        completeCase,
-        shiftProgress
-    } = useShift();
+    const phase = useGameStore(state => state.currentPhase);
+    const setPhase = useGameStore(state => state.setPhase);
+
+    // Stable selectors
+    const shiftNumber = useGameStore(state => state.currentShiftNumber);
+    const startShift = useGameStore(state => state.startShift);
+    const activeCases = useGameStore(state => state.activeCases);
+    const addCase = useGameStore(state => state.addCase);
+    const completeCase = useGameStore(state => state.completeCase);
 
     const [viewMode, setViewMode] = useState<ViewMode>('QUEUE');
     const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
-
-    // Track mutable state in refs to prevent interval re-creation
-    const shiftProgressRef = useRef(shiftProgress);
-    const activeCasesRef = useRef(activeCases);
-
-    useEffect(() => {
-        shiftProgressRef.current = shiftProgress;
-        activeCasesRef.current = activeCases;
-    }, [shiftProgress, activeCases]);
 
     // ============================================
     // TIME & CASE GENERATION LOGIC
@@ -67,27 +56,34 @@ export const ShiftManager: React.FC<ShiftManagerProps> = ({
 
         if (phase === 'GAMEPLAY') {
             interval = setInterval(() => {
+                // Access state directly to avoid re-renders
+                const state = useGameStore.getState();
+
                 // 1. Advance time (1 minute per real second, or configurable)
-                advanceTime(1);
+                state.advanceTime(1);
+
+                // Get fresh state
+                const current = useGameStore.getState();
+                const progress = ((480 - current.shiftTimeRemaining) / 480) * 100;
 
                 // 2. Check for shift end
-                if (shiftProgressRef.current >= 100) {
-                    setPhase('SHIFT_END');
+                if (progress >= 100) {
+                    state.setPhase('SHIFT_END');
                     return;
                 }
 
                 // 3. Try generating new case
-                if (Math.random() < getIncomingCaseChance(0, activeCasesRef.current.length)) {
+                if (Math.random() < getIncomingCaseChance(0, current.activeCases.length)) {
                     // Basic difficulty logic
                     const newCase = generateCase(shiftNumber, 1);
-                    addCase(newCase);
+                    state.addCase(newCase);
                 }
 
             }, 2000); // Tick every 2 seconds
         }
 
         return () => clearInterval(interval);
-    }, [phase, advanceTime, addCase, setPhase, shiftNumber]);
+    }, [phase, shiftNumber]);
 
     // ============================================
     // HANDLERS
@@ -111,7 +107,7 @@ export const ShiftManager: React.FC<ShiftManagerProps> = ({
         }
     };
 
-    const handleEncounterComplete = (outcome: string) => {
+    const handleEncounterComplete = (_outcome: string) => {
         if (selectedCaseId) {
             completeCase(selectedCaseId);
             setSelectedCaseId(null);
