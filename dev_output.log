@@ -1,0 +1,84 @@
+
+> code-blue@0.1.0 dev /app/code-blue
+> next dev
+
+▲ Next.js 16.1.3 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+✓ Ready in 1117ms
+○ Compiling / ...
+ GET / 200 in 6.8s (compile: 6.0s, render: 755ms)
+ GET /noise.png 404 in 2.1s (compile: 1290ms, render: 855ms)
+ GET /sounds/ui/hover.mp3 404 in 2.4s (compile: 1609ms, render: 805ms)
+ GET /sounds/ui/click.mp3 404 in 2.4s (compile: 1552ms, render: 868ms)
+ GET /sounds/ui/success.mp3 404 in 2.4s (compile: 1680ms, render: 734ms)
+ GET /sounds/ui/error.mp3 404 in 2.4s (compile: 1737ms, render: 676ms)
+ GET /sounds/ui/click.mp3 404 in 562ms (compile: 6ms, render: 556ms)
+ GET /sounds/ui/hover.mp3 404 in 605ms (compile: 9ms, render: 596ms)
+ GET /sounds/ui/error.mp3 404 in 528ms (compile: 46ms, render: 481ms)
+ GET /sounds/ui/click.mp3 404 in 526ms (compile: 83ms, render: 444ms)
+ GET /sounds/ui/success.mp3 404 in 533ms (compile: 16ms, render: 517ms)
+ GET /sounds/ui/hover.mp3 404 in 525ms (compile: 195ms, render: 330ms)
+ GET /sounds/ui/success.mp3 404 in 308ms (compile: 13ms, render: 295ms)
+ GET /sounds/ui/error.mp3 404 in 299ms (compile: 5ms, render: 294ms)
+ GET /sounds/ui/hover.mp3 404 in 290ms (compile: 27ms, render: 262ms)
+ GET /sounds/ui/click.mp3 404 in 292ms (compile: 10ms, render: 282ms)
+ GET /sounds/ui/success.mp3 404 in 291ms (compile: 77ms, render: 215ms)
+ GET /sounds/ui/error.mp3 404 in 232ms (compile: 51ms, render: 181ms)
+ GET /sounds/ui/click.mp3 404 in 235ms (compile: 5ms, render: 230ms)
+ GET /sounds/ui/hover.mp3 404 in 279ms (compile: 5ms, render: 274ms)
+ GET /sounds/ui/success.mp3 404 in 277ms (compile: 9ms, render: 267ms)
+ GET /sounds/ui/error.mp3 404 in 278ms (compile: 39ms, render: 239ms)
+ GET /sounds/ui/click.mp3 404 in 280ms (compile: 72ms, render: 208ms)
+ GET /sounds/ui/hover.mp3 404 in 177ms (compile: 23ms, render: 154ms)
+ GET /sounds/ui/success.mp3 404 in 110ms (compile: 7ms, render: 104ms)
+ GET /sounds/ui/error.mp3 404 in 55ms (compile: 5ms, render: 50ms)
+ GET / 200 in 54ms (compile: 5ms, render: 49ms)
+ GET /sounds/ui/click.mp3 404 in 327ms (compile: 7ms, render: 320ms)
+ GET /sounds/ui/hover.mp3 404 in 278ms (compile: 33ms, render: 245ms)
+ GET /sounds/ui/success.mp3 404 in 279ms (compile: 52ms, render: 226ms)
+ GET /sounds/ui/error.mp3 404 in 271ms (compile: 88ms, render: 183ms)
+ GET /noise.png 404 in 157ms (compile: 35ms, render: 122ms)
+ GET /sounds/ui/click.mp3 404 in 192ms (compile: 59ms, render: 133ms)
+ GET /sounds/ui/hover.mp3 404 in 382ms (compile: 11ms, render: 372ms)
+ GET /sounds/ui/error.mp3 404 in 330ms (compile: 42ms, render: 289ms)
+ GET /sounds/ui/success.mp3 404 in 334ms (compile: 19ms, render: 315ms)
+ GET /sounds/ui/click.mp3 404 in 325ms (compile: 166ms, render: 160ms)
+ GET /sounds/ui/hover.mp3 404 in 149ms (compile: 13ms, render: 136ms)
+ GET /sounds/ui/success.mp3 404 in 205ms (compile: 10ms, render: 195ms)
+ GET /sounds/ui/error.mp3 404 in 336ms (compile: 7ms, render: 330ms)
+ GET /sounds/ui/click.mp3 404 in 300ms (compile: 12ms, render: 288ms)
+ GET /sounds/ui/hover.mp3 404 in 297ms (compile: 45ms, render: 252ms)
+ GET /sounds/ui/success.mp3 404 in 258ms (compile: 55ms, render: 204ms)
+ GET /sounds/ui/error.mp3 404 in 212ms (compile: 13ms, render: 199ms)
+ GET /sounds/ui/click.mp3 404 in 283ms (compile: 27ms, render: 256ms)
+ GET /sounds/ui/hover.mp3 404 in 262ms (compile: 7ms, render: 254ms)
+ GET /sounds/ui/success.mp3 404 in 226ms (compile: 15ms, render: 212ms)
+ GET /sounds/ui/error.mp3 404 in 224ms (compile: 40ms, render: 183ms)
+ GET /sounds/ui/click.mp3 404 in 218ms (compile: 46ms, render: 172ms)
+ GET /sounds/ui/hover.mp3 404 in 145ms (compile: 13ms, render: 132ms)
+ GET /sounds/ui/success.mp3 404 in 100ms (compile: 13ms, render: 87ms)
+ GET /sounds/ui/error.mp3 404 in 47ms (compile: 5ms, render: 42ms)
+ GET / 200 in 80ms (compile: 6ms, render: 74ms)
+ GET /noise.png 404 in 194ms (compile: 36ms, render: 157ms)
+ GET /sounds/ui/click.mp3 404 in 437ms (compile: 14ms, render: 423ms)
+ GET /sounds/ui/hover.mp3 404 in 439ms (compile: 55ms, render: 384ms)
+ GET /sounds/ui/success.mp3 404 in 395ms (compile: 75ms, render: 320ms)
+ GET /sounds/ui/error.mp3 404 in 377ms (compile: 77ms, render: 300ms)
+ GET /sounds/ui/click.mp3 404 in 326ms (compile: 91ms, render: 234ms)
+ GET /sounds/ui/hover.mp3 404 in 310ms (compile: 11ms, render: 299ms)
+ GET /sounds/ui/success.mp3 404 in 266ms (compile: 16ms, render: 250ms)
+ GET /sounds/ui/error.mp3 404 in 264ms (compile: 51ms, render: 213ms)
+ GET /sounds/ui/click.mp3 404 in 263ms (compile: 49ms, render: 213ms)
+ GET /sounds/ui/hover.mp3 404 in 178ms (compile: 24ms, render: 155ms)
+ GET /sounds/ui/success.mp3 404 in 117ms (compile: 10ms, render: 107ms)
+ GET /sounds/ui/error.mp3 404 in 55ms (compile: 9ms, render: 46ms)
+ ELIFECYCLE  Command failed.
+[?25h

@@ -208,7 +208,7 @@ export const CPCMode: React.FC<CPCModeProps> = ({
                     animate={{ opacity: 1, y: 0 }}
                     className="max-w-md w-full text-center space-y-8"
                 >
-                    <h1 className="text-5xl font-bold text-red-500 mb-2">TIME'S UP</h1>
+                    <h1 className="text-5xl font-bold text-red-500 mb-2">TIME&apos;S UP</h1>
 
                     <div className="bg-gray-800 rounded-lg p-8 border border-gray-700">
                         <div className="mb-6">
@@ -253,6 +253,7 @@ export const CPCMode: React.FC<CPCModeProps> = ({
                             variant={timeLeft < 10 ? 'stress' : 'time'}
                             size="lg" // Now works
                             showLabel={false}
+                            aria-label="Time Remaining"
                         />
                     </div>
                 </div>
